@@ -2,14 +2,17 @@
 import psycopg2
 import sys
 import psycopg2.extras
-import re
 from csv import DictReader
+from config import *
 
 # Write code / functions to set up database connection and cursor here.
 try:
-    conn = psycopg2.connect("dbname='jarvm_507project6' user='jarvm'") # No password on the databases yet -- wouldn't want to save that in plain text, anyway
-    # Remember: need to, at command prompt or in postgres GUI: createdb test507_music (or whatever db name is in line ^)
-    print("Success connecting to database")
+    if db_password != "":
+        conn = psycopg2.connect("dbname='{0}' user='{1}' password='{2}'".format(db_name, db_user, db_password))
+        print("Success connecting to database")
+    else:
+        conn = psycopg2.connect("dbname='{0}' user='{1}'".format(db_name, db_user))
+        print("Success connecting to database")
 except:
     print("Unable to connect to the database. Check server and credentials.")
     sys.exit(1) # Stop running program if there's no db connection.
@@ -53,7 +56,7 @@ def insert_into_Sites(filename, conn=conn, cur=cur):
         location = line_dict["LOCATION"]
         description = line_dict["DESCRIPTION"].strip()
         cur.execute(sql,(name_val[0:128], type_val[0:128], state_id, location[0:255], description,))
-        conn.commit()
+    conn.commit()
 
 
 insert_into_Sites('Arkansas.csv')
@@ -67,17 +70,19 @@ insert_into_Sites('California.csv')
 
 cur.execute("""SELECT Location FROM Sites """)
 all_locations = cur.fetchall()
-print(all_locations[0])
-
+print(all_locations)
+print("\n")
 cur.execute("""SELECT Name FROM Sites
                WHERE Description LIKE '%beautiful%' """)
 beautiful_sites = cur.fetchall()
-print(beautiful_sites[0])
+print(beautiful_sites)
+print("\n")
 
 cur.execute("""SELECT COUNT(ID) FROM Sites
                WHERE Type = 'National Lakeshore' """)
-natl_lakeshors = cur.fetchall()
-print(natl_lakeshors)
+natl_lakeshores = cur.fetchall()
+print(natl_lakeshores)
+print("\n")
 
 cur.execute("""SELECT Sites.Name
                FROM Sites INNER JOIN States
@@ -85,12 +90,12 @@ cur.execute("""SELECT Sites.Name
                WHERE States.Name = 'Michigan' """)
 michigan_names = cur.fetchall()
 print(michigan_names)
+print("\n")
 
 cur.execute(""" SELECT Count(Sites.State_ID)
                 FROM Sites INNER JOIN States
                 ON States.ID = Sites.State_ID
                 WHERE States.Name = 'Arkansas' """)
-total_arkansas_sites = cur.fetchall()
-print(total_arkansas_sites)
-# We have not provided any tests, but you could write your own in this file or another file, if you want.
+total_number_arkansas = cur.fetchall()
+print(total_number_arkansas)
 
