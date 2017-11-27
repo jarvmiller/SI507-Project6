@@ -70,32 +70,32 @@ insert_into_Sites('California.csv')
 
 cur.execute("""SELECT Location FROM Sites """)
 all_locations = cur.fetchall()
-print(all_locations)
-print("\n")
+# print(all_locations)
+# print("\n")
 cur.execute("""SELECT Name FROM Sites
                WHERE Description LIKE '%beautiful%' """)
 beautiful_sites = cur.fetchall()
-print(beautiful_sites)
-print("\n")
+# print(beautiful_sites)
+# print("\n")
 
 cur.execute("""SELECT COUNT(ID) FROM Sites
                WHERE Type = 'National Lakeshore' """)
 natl_lakeshores = cur.fetchall()
-print(natl_lakeshores)
-print("\n")
+# print(natl_lakeshores)
+# print("\n")
 
 cur.execute("""SELECT Sites.Name
                FROM Sites INNER JOIN States
                ON States.ID = Sites.State_ID
                WHERE States.Name = 'Michigan' """)
 michigan_names = cur.fetchall()
-print(michigan_names)
-print("\n")
+# print(michigan_names)
+# print("\n")
 
 cur.execute(""" SELECT Count(Sites.State_ID)
                 FROM Sites INNER JOIN States
                 ON States.ID = Sites.State_ID
                 WHERE States.Name = 'Arkansas' """)
 total_number_arkansas = cur.fetchall()
-print(total_number_arkansas)
-
+# print(total_number_arkansas)
+print("finished all queries")
